@@ -1,0 +1,56 @@
+{% macro toggle_upcoming(recipe, right=True) %}
+<div class="{% if right %}pull-right{% endif %}">
+    <a class="btn btn-default btn-sm"
+       href="javascript:change_servings('#upcoming_servings{{ recipe.id }}', -1);"
+       role="button">
+        -
+    </a>
+    <a class="btn btn-default btn-sm disabled" id="upcoming_servings{{ recipe.id }}">
+        {{ recipe.upcoming_servings }}
+    </a>
+    <a class="btn btn-default btn-sm"
+       href="javascript:change_servings('#upcoming_servings{{ recipe.id }}', 1);"
+       role="button">
+        +
+    </a>
+</div>
+<br>
+<br>
+<div class="{% if right %}pull-right{% endif %}">
+    <a class="btn btn-default btn-sm disabled {% if not recipe.upcoming %}collapse{% endif %}"
+       id="upcoming_badge{{ recipe.id }}">
+        upcoming
+    </a>
+    <a id="add_upcoming{{ recipe.id }}"
+       class="btn btn-default btn-sm"
+       role="button"
+       href="javascript:add_upcoming('{{ recipe.id }}',
+             '#upcoming_servings{{ recipe.id }}',
+             '#upcoming_badge{{ recipe.id }}');">
+            ✓
+    </a>
+    <a id="remove_upcoming{{ recipe.id }}"
+       class="btn btn-default btn-sm"
+       role="button"
+       href="javascript:remove_upcoming('{{ recipe.id }}',
+             '#upcoming_badge{{ recipe.id }}');">
+            x
+    </a>
+</div>
+{% endmacro %}
+
+{% macro with_errors(field) %}
+    <div class="form_field">
+    {% if field.errors %}
+        {% set css_class = 'has_error ' + kwargs.pop('class', '') %}
+        {{ field(class=css_class, **kwargs) }}
+        <div class="errors" style="color: red">
+            {% for error in field.errors %}
+                {{ error|e }}
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ field(**kwargs) }}
+    {% endif %}
+    </div>
+{% endmacro %}

@@ -1,0 +1,28 @@
+features
++++
+++
+on a recipe details, show the ingredients with upcoming_servings instead of default
+user tags
+add a user_tag bool to tags. So that when we edit, we can easily remove the
+    old automatic tags and keep the user tags
++
+import/export
+more automatic tagging (prep time, needs heating...)
+
+improvements / bugs
++++
+sanitize the tags, removing any unwanted characters (trailing commas, etc...)
+++
+add some js spices :
+    * auto-suggest existing ingredients, units...
+    * add some js spices to add more ingredient fields when adding recipe instead
+      of the default big chunk of 20 ingredients
+allow to not input unit when adding an ingredient
+use a NamedTuple instead of a dict to deal with ingredients in non-model form
++
+validate recipe name, since it is used for an url (low priority since the app is not
+    open to all, we are not as susceptible to bad user input)
+prettify the error display when not using wtf.quick_form
+current tag approach leads to lots of undesirable tags : Tags(["pasta", "with", "cheese"])
+as is, cannot add two recipes in the same db session. Still not sure whether it needs fixing.
+when using light theme, screen flashes the dark theme first

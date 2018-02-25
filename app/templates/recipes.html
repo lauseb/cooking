@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block app_content %}
+    <h1>Recipe list</h1>
+    <hr>
+    {% for recipe in recipes %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-xs-5">
+                <h2>
+                    <a href="{{ url_for("main.recipe", name=recipe.name) }}">{{ recipe.name }}</a>
+                </h2>
+                <ul>
+                {% for ingredient in recipe.ingredients %}
+                    <li>{{ ingredient.name }} {{ ingredient.quantity }}{{ ingredient.unit }}</li>
+                {% endfor %}
+                </ul>
+                {{ recipe.steps }}
+            </div>
+            <div class="col-md-4 col-xs-4">
+                <div class="center-block">
+                {{ macros.toggle_upcoming(recipe) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    {% endfor %}
+
+    <nav>
+        <ul class="pagination">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a {% if prev_url %}href="{{ prev_url }}"{% endif %}>
+                    <span>&larr;</span> Previous page
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a {% if next_url %}href="{{ next_url }}"{% endif %}>
+                    Next page <span>&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+{% endblock %}

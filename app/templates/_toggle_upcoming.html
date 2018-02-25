@@ -1,0 +1,9 @@
+<a id="toggle_upcoming{{ recipe.id }}" class="btn btn-default pull-right" role="button"
+   href="javascript:toggle_upcoming('{{ recipe.id }}',
+         '#toggle_upcoming{{ recipe.id }}');">
+    {% if recipe.upcoming %}
+        Remove from upcoming recipes
+    {% else %}
+        Add to upcoming recipes
+    {% endif %}
+</a>

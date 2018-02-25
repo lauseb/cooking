@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block app_content %}
+    <h1>{{ recipe.name }}</h1>
+    <hr>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-xs-5">
+                <h3>Servings : {{ recipe.servings }}</h3>
+                <h3>Preparation time : {{ recipe.prep_time }}</h3>
+                <h3>Cooking time : {{ recipe.cooking_time }}</h3>
+                <h3>Cooking temperature : {{ recipe.cooking_temperature }}</h3>
+
+                <h3>Ingredients :</h3>
+                <ul>
+                    {% for ingredient in recipe.ingredients %}
+                        <li>{{ ingredient.name }} : {{ ingredient.quantity }} {{ ingredient.unit }}</li>
+                    {% endfor %}
+                </ul>
+                <h3>Steps :</h3>
+                <p>{{ recipe.steps }}</p>
+                <h3>Tags :</h3>
+                <p>
+                {{ tags }}
+                </p>
+                <a class="btn btn-default" role="button"
+                   href={{ url_for("main.edit_recipe", name=recipe.name) }}>Edit</a>
+            </div>
+            <div class="col-md-4 col-xs-4">
+                {{ macros.toggle_upcoming(recipe) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

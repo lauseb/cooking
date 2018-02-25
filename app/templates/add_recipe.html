@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block app_content %}
+    <h1>{{ title }}</h1>
+    <hr>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="container-fluid">
+            <p>
+                {{ form.name.label }}<br>
+                {{ macros.with_errors(form.name, size=32) }}<br>
+            </p>
+            <p>
+                {{ form.steps.label }}<br>
+                {{ macros.with_errors(form.steps, size=100) }}<br>
+            </p>
+            <div class="row">
+                <div class="col-md-2">
+                    {{ form.servings.label }}<br>
+                    {{ macros.with_errors(form.servings, size=10) }}<br>
+                </div>
+                <div class="col-md-2">
+                    {{ form.cooking_temperature.label }}<br>
+                    {{ macros.with_errors(form.cooking_temperature, size=10) }}<br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    {{ form.prep_time.label }}<br>
+                    {{ macros.with_errors(form.prep_time, size=10) }}<br>
+                </div>
+                <div class="col-md-2">
+                    {{ form.cooking_time.label }}<br>
+                    {{ macros.with_errors(form.cooking_time, size=10) }}<br>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-5">
+                    {{ form.ingredients[0].ing_name.label }}
+                </div>
+                <div class="col-xs-1">
+                    {{ form.ingredients[0].quantity.label }}
+                </div>
+                <div class="col-xs-1">
+                    {{ form.ingredients[0].unit.label }}
+                </div>
+            </div>
+            {% if form.ingredients.errors|length == 1 and form.ingredients.errors[0] is string %}
+                <div class="errors" style="color: red">
+                    {{ form.ingredients.errors[0]|e }}
+                </div>
+            {% endif %}
+            {% for ingredient in form.ingredients %}
+                <div class="row">
+                    <div class="col-xs-5">
+                        {{ macros.with_errors(ingredient.ing_name, class="form-control input-sm", size=40) }}
+                    </div>
+                    <div class="col-xs-1">
+                        {{ macros.with_errors(ingredient.quantity, class="form-control input-sm", size=10) }}
+                    </div>
+                    <div class="col-xs-1">
+                        {{ macros.with_errors(ingredient.unit, class="form-control input-sm", size=10) }}
+                    </div>
+                </div>
+                <br>
+            {% endfor %}
+            <br>
+            {{ form.submit() }}
+        </div>
+    </form>
+
+{% endblock %}

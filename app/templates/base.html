@@ -1,0 +1,146 @@
+{% extends "bootstrap/base.html" %}
+{% import "macros.html" as macros %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='custom.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='dark.css') }}">
+{% endblock %}
+
+{% block title %}
+    {% if title %}{{ title }} - Cooking{% else %}Welcome to Cooking{% endif %}
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed"
+                        data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1"
+                        aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('main.index') }}">Cooking</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('main.recipes') }}">Browse recipes</a></li>
+                    {% if not current_user.is_anonymous %}
+                    <li><a href="{{ url_for('main.add_recipe') }}">Add a recipe</a></li>
+                    {% endif %}
+                    <form class="navbar-form navbar-left" method="get"
+                        action="{{ url_for('main.search') }}">
+                        <div class="form-group">
+                            {{ g.search_form.query(size=20, class='form-control',
+                                placeholder=g.search_form.query.label.text) }}
+                        </div>
+                    </form>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="javascript:toggleDark();">Toggle dark mode</a></li>
+
+                    {% if current_user.is_anonymous %}
+                    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{url_for('static', filename='js-cookie.js')}}"></script>
+<script>
+    function toggleDark() {
+        for (i=0; i<document.styleSheets.length; i++) {
+            if( document.styleSheets.item(i).href.includes("dark.css")) {
+                var dark = document.styleSheets.item(i)
+                if (dark.disabled) {
+                    Cookies.set("dark", 1);
+                    dark.disabled = false;
+                } else {
+                    Cookies.set("dark", 0);
+                    dark.disabled = true;
+                }
+            }
+        }
+    }
+    $(function() {
+        for (i=0; i<document.styleSheets.length; i++) {
+            if( document.styleSheets.item(i).href.includes("dark.css")) {
+                var dark = document.styleSheets.item(i)
+                if (Cookies.get("dark") == 0) {
+                    dark.disabled = true;
+                } else {
+                    dark.disabled = false;
+                }
+            }
+        }
+    });
+
+    function add_upcoming(recipeId, sourceElem, destElem) {
+        $.post("{{ url_for('main.add_upcoming') }}", {
+            recipe_id: recipeId,
+            upcoming_servings: $(sourceElem).text()
+        }).done(function(response) {
+            if(response["upcoming"]) {
+                $(destElem).removeClass("collapse");
+                if (!window.location.pathname.includes("recipes")) {
+                    location.reload();
+                }
+            }
+        }).fail(function() {
+            $(destElem).text("failed");
+            $(destElem).show();
+        });
+    }
+
+    function remove_upcoming(recipeId, destElem) {
+        $.post("{{ url_for('main.remove_upcoming') }}", {
+            recipe_id: recipeId
+        }).done(function(response) {
+            if(!response["upcoming"]) {
+                $(destElem).addClass("collapse");
+                if (!window.location.pathname.includes("recipes")) {
+                    location.reload();
+                }
+            }
+        }).fail(function() {
+            $(destElem).text("failed");
+            $(destElem).show();
+        });
+    }
+
+    function change_servings(elem, nb) {
+        var upcoming_servings = parseInt($(elem).text());
+        upcoming_servings += nb
+        if (upcoming_servings > 0) {
+            $(elem).text(upcoming_servings);
+        }
+    }
+</script>
+{% endblock %}
