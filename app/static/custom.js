@@ -25,8 +25,8 @@ $(function() {
     }
 });
 
-function add_upcoming(recipeId, sourceElem, destElem) {
-    $.post("{{ url_for('main.add_upcoming') }}", {
+function add_upcoming(url, recipeId, sourceElem, destElem) {
+    $.post(url, {
         recipe_id: recipeId,
         upcoming_servings: $(sourceElem).text()
     }).done(function(response) {
@@ -42,8 +42,8 @@ function add_upcoming(recipeId, sourceElem, destElem) {
     });
 }
 
-function remove_upcoming(recipeId, destElem) {
-    $.post("{{ url_for('main.remove_upcoming') }}", {
+function remove_upcoming(url, recipeId, destElem) {
+    $.post(url, {
         recipe_id: recipeId
     }).done(function(response) {
         if(!response["upcoming"]) {
