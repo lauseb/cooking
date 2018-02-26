@@ -34,7 +34,7 @@ class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), index=True)
     steps = db.Column(db.UnicodeText())
-    servings = db.Column(db.Integer)
+    servings = db.Column(db.Integer, default=1)
     cooking_temperature = db.Column(db.Integer)
     cooking_time = db.Column(db.Integer)
     prep_time = db.Column(db.Integer)
