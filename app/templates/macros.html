@@ -24,7 +24,9 @@
     <a id="add_upcoming{{ recipe.id }}"
        class="btn btn-default btn-sm"
        role="button"
-       href="javascript:add_upcoming('{{ recipe.id }}',
+       href="javascript:add_upcoming(
+             '{{ url_for('main.add_upcoming') }}',
+             '{{ recipe.id }}',
              '#upcoming_servings{{ recipe.id }}',
              '#upcoming_badge{{ recipe.id }}');">
             ✓
@@ -32,7 +34,9 @@
     <a id="remove_upcoming{{ recipe.id }}"
        class="btn btn-default btn-sm"
        role="button"
-       href="javascript:remove_upcoming('{{ recipe.id }}',
+       href="javascript:remove_upcoming(
+             '{{ url_for('main.remove_upcoming') }}',
+             '{{ recipe.id }}',
              '#upcoming_badge{{ recipe.id }}');">
             x
     </a>
