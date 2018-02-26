@@ -55,7 +55,7 @@ class AddRecipeForm(FlaskForm):
                 raise ValidationError("Recipe exists already")
 
     def validate_servings(self, servings):
-        if servings < 1:
+        if servings.data < 1:
             raise ValidationError("Servings must be at least one")
 
     def validate_ingredients(self, ingredients):
